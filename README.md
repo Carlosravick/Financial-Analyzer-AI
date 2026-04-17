@@ -10,7 +10,7 @@ O **Financial Analyzer AI** foi desenvolvido utilizando os conceitos de **Clean 
 ## Decisões Técnicas
 
 1. **Uso do Modelo `gpt-4o-mini`:** Focado na eficiência técnica e de custos (Tokens). Ele é incrivelmente rápido e extremamente eficiente em seguir as guidelines rigorosas passadas pelo "System Prompt" no Pandas Agent, enquanto nos poupa dinheiro nos requests repetitivos de Embeddings.
-2. **Separação de Rotas Modulares:** Criei os arquivos (`data_engine.py`, `ai_engine.py`, `models.py`) em pró da testabilidade e manutenibilidade contínua que uma equipe Sênior precisa, e não deixar tudo acoplado dentro do Endpoint/main.
+2. **Separação de Rotas Modulares:** O backend foi estruturado em módulos independentes (`data_engine.py`, `ai_engine.py`, `models.py`) para facilitar a manutenção, clareza e evolução do código, evitando que lógicas complexas fiquem todas agrupadas no arquivo principal.
 3. **Parsing de Excel / CSV Complexo:** O Worker no serviço de Data Engine extrai BOMs (\ufeff), lida com planilhas que estouram delimitadores (CSV ';' vs ',') e padroniza a formatação contábil para Float exato antes mesmo do LLM encostar nela.
 4. **Insights Proativos (Automáticos):** Ao fazer o Upload, o backend executa _zero-shot processing_ onde analisa a situação macro da empresa com base no resumo processado, exibindo dicas ativas no front (ex: controle de inadimplência), em vez de apenas agendar o RAG ou depender do chat.
 
@@ -23,33 +23,12 @@ O **Financial Analyzer AI** foi desenvolvido utilizando os conceitos de **Clean 
 ## Instruções de Instalação e Uso
 
 ### Utilizando Docker
-1. Crie o arquivo `.env` no subdiretório `backend` (exemplo: `backend/.env`) com a chave da OpenAI:
-   `OPENAI_API_KEY=sk-...` (Sua chave)
-2. Retorne a raíz do repositório (onde o arquivo `docker-compose.yml` está).
-3. Execute o comando:
+A aplicação foi completamente "dockerizada" para garantir compatibilidade e reprodutibilidade de ambiente.
+
+1. Crie o arquivo `.env` dentro da pasta `backend` (logo, `backend/.env`) com a sua chave da API da OpenAI:
+   `OPENAI_API_KEY=sk-...`
+2. Pelo terminal, na raiz do repositório (onde o arquivo `docker-compose.yml` está), execute os contêineres:
    ```bash
    docker-compose up --build
    ```
-4. Navegue até o frontend em: [http://localhost:3000](http://localhost:3000)
-
-### Instalação e Execução Manual
-**Backend (FastAPI)**
-```bash
-cd backend
-python -m venv venv
-.\venv\Scripts\activate # Em linux: source venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-**Frontend (Next.js)**
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-*Frontend estará ativo na porta 3000.*
-
----
-Espero que gostem da aplicação! Caso precise gravar o vídeo explicativo de 5 minutos, foque primeiramente na arquitetura (como dividimos Pandas vs Embeddings RAG) e na UX fluída dos cards na UI.
+3. Acesse a plataforma pelo navegador: [http://localhost:3000](http://localhost:3000)
