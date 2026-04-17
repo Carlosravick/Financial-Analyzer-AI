@@ -1,0 +1,14 @@
+# Root project ignores
+.git
+.DS_Store
+.vscode
+.idea
+*.log
+.env
+.env.*
+
+# Ignore inner node modules and python builds just to keep root clean
+node_modules/
+__pycache__/
+venv/
+env/

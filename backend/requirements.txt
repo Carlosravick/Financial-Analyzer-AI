@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+pandas
+openpyxl
+langchain
+langchain-openai
+langchain-community
+openai
+faiss-cpu
+python-multipart
+python-dotenv
+langchain-experimental
+pandas
+tabulate
