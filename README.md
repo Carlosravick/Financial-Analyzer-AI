@@ -25,7 +25,7 @@ O **Financial Analyzer AI** foi desenvolvido utilizando os conceitos de **Clean 
 ### Utilizando Docker
 A aplicação foi completamente "dockerizada" para garantir compatibilidade e reprodutibilidade de ambiente.
 
-1. Crie o arquivo `.env` dentro da pasta `backend` (logo, `backend/.env`) com a sua chave da API da OpenAI:
+1. Crie o arquivo `.env` na **raiz do projeto** (junto do arquivo `docker-compose.yml`) com a sua chave da API da OpenAI:
    `OPENAI_API_KEY=sk-...`
 2. Pelo terminal, na raiz do repositório (onde o arquivo `docker-compose.yml` está), execute os contêineres:
    ```bash
