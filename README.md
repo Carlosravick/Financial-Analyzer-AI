@@ -20,10 +20,16 @@
 
 ## 🎥 Apresentação do Projeto
 
-Confira o vídeo de apresentação e explicação técnica do projeto no YouTube: 
-[![Demonstração do Projeto](https://img.youtube.com/vi/MfuscmHL1eA/0.jpg)](https://youtu.be/MfuscmHL1eA)
+<div align="center">
+  Confira o vídeo de apresentação e explicação técnica do projeto no YouTube:<br><br>
+  
+  <a href="https://youtu.be/MfuscmHL1eA">
+    <img src="https://img.youtube.com/vi/MfuscmHL1eA/0.jpg" alt="Demonstração do Projeto" width="600" />
+  </a>
+  <br><br>
 
-🔗 **Link direto para o vídeo:** [https://youtu.be/MfuscmHL1eA](https://youtu.be/MfuscmHL1eA)
+  🔗 **Link direto para o vídeo:** <a href="https://youtu.be/MfuscmHL1eA">https://youtu.be/MfuscmHL1eA</a>
+</div>
 
 ---
 
