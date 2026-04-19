@@ -39,8 +39,6 @@ data/faiss_index/
 .env.*
 
 # Docker
-.dockerignore
-Dockerfile
 
 # Testing and Coverage
 .tox/

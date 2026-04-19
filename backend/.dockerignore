@@ -1,0 +1,18 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+venv
+.env
+.pytest_cache
+.vscode
+.idea
+.DS_Store
+.git
+Dockerfile
+.dockerignore
+
+# Dados locais (para evitar copiar o BD do FAISS pro container desnecessariamente)
+data/faiss_index/
