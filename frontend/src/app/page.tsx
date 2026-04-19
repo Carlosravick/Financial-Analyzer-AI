@@ -3,28 +3,25 @@
 import { useState } from "react";
 import { Upload, MessageSquare, DollarSign, Percent, BarChart3, Send, AlertTriangle } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { DashboardCard } from "@/components/DashboardCard";
+import { api } from "@/services/api";
+import { MetricsResponse, ChatMessage } from "@/types";
 
 export default function FinancialDashboard() {
-  const [metrics, setMetrics] = useState<any>(null);
+  const [metrics, setMetrics] = useState<MetricsResponse | null>(null);
   const [insights, setInsights] = useState<string[]>([]);
   const [question, setQuestion] = useState("");
-  const [chat, setChat] = useState<{ q: string; a: string }[]>([]);
+  const [chat, setChat] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
 
   // Função para fazer Upload do CSV ou XLSX
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.[0]) return;
     const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
+      const data = await api.uploadFile(file);
       setMetrics(data.metrics);
       setInsights(data.insights || []);
       alert("Arquivo processado com sucesso!");
@@ -46,12 +43,7 @@ export default function FinancialDashboard() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: userQ }),
-      });
-      const data = await res.json();
+      const data = await api.askQuestion(userQ);
       
       setChat((prev) => {
         const newChat = [...prev];
@@ -87,10 +79,10 @@ export default function FinancialDashboard() {
 
       {/* Dashboard Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card title="Receita Total (Paga)" value={`R$ ${metrics?.receita_total?.toLocaleString() || "0"}`} icon={<DollarSign className="text-green-400" />} />
-        <Card title="Ticket Médio" value={`R$ ${metrics?.ticket_medio?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) || "0,00"}`} icon={<BarChart3 className="text-blue-400" />} />
-        <Card title="Inadimplência" value={`${metrics?.taxa_inadimplencia?.toFixed(2) || "0,00"}%`} icon={<Percent className="text-red-400" />} />
-        <Card title="Volume de Transações" value={metrics?.total_transacoes || "0"} icon={<MessageSquare className="text-purple-400" />} />
+        <DashboardCard title="Receita Total (Paga)" value={`R$ ${metrics?.receita_total?.toLocaleString() || "0"}`} icon={<DollarSign className="text-green-400" />} />
+        <DashboardCard title="Ticket Médio" value={`R$ ${metrics?.ticket_medio?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) || "0,00"}`} icon={<BarChart3 className="text-blue-400" />} />
+        <DashboardCard title="Inadimplência" value={`${metrics?.taxa_inadimplencia?.toFixed(2) || "0,00"}%`} icon={<Percent className="text-red-400" />} />
+        <DashboardCard title="Volume de Transações" value={metrics?.total_transacoes || "0"} icon={<MessageSquare className="text-purple-400" />} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 items-stretch">
@@ -189,18 +181,6 @@ export default function FinancialDashboard() {
           </button>
         </form>
       </div>
-    </div>
-  );
-}
-
-function Card({ title, value, icon }: any) {
-  return (
-    <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl flex flex-col justify-between h-full">
-      <div className="flex justify-between items-start mb-4">
-        <span className="text-slate-400 font-medium text-sm">{title}</span>
-        <div className="p-2 bg-slate-900 rounded-lg">{icon}</div>
-      </div>
-      <div className="text-3xl font-bold text-slate-100 mt-auto">{value}</div>
     </div>
   );
 }
