@@ -33,7 +33,7 @@ venv.bak/
 data/faiss_index/
 *.db
 *.sqlite3
-processes_data.pkl
+processed_data.pkl
 
 # Env and Secrets
 .env
