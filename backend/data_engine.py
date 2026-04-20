@@ -96,8 +96,7 @@ def _clean_currency_column(series: pd.Series) -> pd.Series:
 def get_metrics_and_evolution(df: pd.DataFrame) -> Tuple[Dict, List[Dict]]:
     """ Calcula os KPIs financeiros e o agrupamento temporal. """
     
-    # SENIOR: Trabalhamos com uma cópia para evitar "Side Effects" (efeitos colaterais)
-    # no DataFrame original que está na memória do sistema.
+    # Cria uma cópia para evitar mutações no DataFrame original durante o cálculo dos KPIs
     df_work = df.copy()
     
     if COL_DATA in df_work.columns:
