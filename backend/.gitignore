@@ -33,12 +33,12 @@ venv.bak/
 data/faiss_index/
 *.db
 *.sqlite3
+processes_data.pkl
 
 # Env and Secrets
 .env
 .env.*
 
-# Docker
 
 # Testing and Coverage
 .tox/
