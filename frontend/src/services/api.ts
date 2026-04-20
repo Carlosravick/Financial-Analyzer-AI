@@ -7,23 +7,41 @@ export const api = {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch(`${API_BASE_URL}/upload`, {
-      method: "POST",
-      body: formData,
-    });
-    if (!res.ok) throw new Error("Network response was not ok");
-    
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE_URL}/upload`, {
+        method: "POST",
+        body: formData,
+      });
+      
+      if (!res.ok) {
+        const errorData = await res.text();
+        throw new Error(`Upload failed: ${res.status} ${res.statusText} - ${errorData}`);
+      }
+      
+      return await res.json();
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      throw error;
+    }
   },
 
   askQuestion: async (question: string): Promise<{ answer: string }> => {
-    const res = await fetch(`${API_BASE_URL}/ask`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question }),
-    });
-    if (!res.ok) throw new Error("Network response was not ok");
+    try {
+      const res = await fetch(`${API_BASE_URL}/ask`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }),
+      });
+      
+      if (!res.ok) {
+        const errorData = await res.text();
+        throw new Error(`Failed to ask question: ${res.status} ${res.statusText} - ${errorData}`);
+      }
 
-    return res.json();
+      return await res.json();
+    } catch (error) {
+      console.error("Error asking question:", error);
+      throw error;
+    }
   }
 };
