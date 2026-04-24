@@ -49,27 +49,26 @@ def generate_insights_from_data(metrics: Dict, evolucao: List[Dict]) -> List[str
     try:
         llm = ChatOpenAI(model=DEFAULT_MODEL, temperature=0.5)
         prompt = PromptTemplate.from_template(
-            """Aja como um analista financeiro corporativo de alto escalão. Você recebeu este resumo financeiro contendo a evolução mensal da empresa:
+            """Aja como um analista financeiro corporativo de alto escalão. Você recebeu este resumo financeiro da empresa:
 Receita Total Paga: R$ {receita}
+Ticket Médio: R$ {ticket_medio}
 Inadimplência: {inad}% 
-Mês de Maior Faturamento (Pico): {maior_mes} no valor de R$ {maior_valor}
 Evolução Temporal Completa (Mês a Mês): {evolucao}
 
-Sua tarefa principal é atuar como um conselheiro proativo que acabou de bater os olhos nesses dados e notou 3 coisas muito diferentes e interessantes (Insights Críticos). Gere 3 frases curtas de 1 linha.
+Sua tarefa principal é atuar como um conselheiro estratégico que analisa esses dados e gera 3 Insights Críticos e Não Triviais (nível Diretoria).
 REGRAS TÉCNICAS E MENTAIS:
-1. VOCÊ É CRIATIVO: Nunca gere os mesmos insights. Olhe para os dados de queda de faturamento nos últimos meses, mas TAMBÉM olhe se há sazonalidade (altas de fim de ano ou quedas no meio do ano).
-2. USE A MATEMÁTICA INJETADA: Você foi informado do 'Mês de Maior Faturamento'. Use esse dado exato com o mês e o número se quiser falar sobre os picos, sem precisar inventar cálculos.
-3. NÃO FIQUE PRESO EM RETRANCA: A inadimplência é alta? Fale. É muito baixa (menos de 5%)? Reconheça como um triunfo ou ponto neutro, não trate como pânico.
-4. CITE OS NÚMEROS REAIS PARA EMBASAR SUA EXPLICAÇÃO. 
-Retorne a resposta APENAS como um array JSON válido de strings e NADA MAIS."""
+1. NÃO SEJA TRIVIAL: O usuário já está vendo os gráficos e totais na tela. NÃO narre o óbvio (ex: "Sua receita é X" ou "O melhor mês foi Y").
+2. CRUZE OS DADOS: Busque correlações. A receita subiu mas o ticket médio caiu? A inadimplência alta justifica rever as vendas a prazo? Identifique padrões ocultos.
+3. FOCO EM AÇÃO: Suas conclusões devem gerar ação. Dê conselhos diretos do que a empresa deve fazer para melhorar as métricas no próximo mês.
+4. CITE OS NÚMEROS REAIS PARA EMBASAR SUA EXPLICAÇÃO.
+Cada insight deve ser uma única frase curta e de grande impacto. Retorne a resposta APENAS como um array JSON válido de strings e NADA MAIS. """
         )
         
         chain = prompt | llm | StrOutputParser()
         res = chain.invoke({
             "receita": metrics.get('receita_total', 0),
+            "ticket_medio": metrics.get('ticket_medio', 0),
             "inad": metrics.get('taxa_inadimplencia', 0),
-            "maior_mes": max(evolucao, key=lambda x: x.get('receita', 0)).get('periodo', 'N/A') if evolucao else "N/A",
-            "maior_valor": f"{max(evolucao, key=lambda x: x.get('receita', 0)).get('receita', 0.0):,.2f}".replace(",", "X").replace(".", ",").replace("X", ".") if evolucao else "0,00",
             "evolucao": evolucao
         })
         
